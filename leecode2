@@ -1,0 +1,41 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        // 创建哑节点，用于简化头节点的处理
+        ListNode* dummy = new ListNode(0);
+        ListNode* curr = dummy;
+        // 进位值，初始为0
+        int carry = 0;
+        // 遍历两个链表，只要有一个不为空或者还有进位，就继续循环
+        while (l1 != nullptr || l2 != nullptr || carry != 0) {
+            // 取出两个链表当前节点的值，若链表为空则取0
+            int val1 = l1 ? l1->val : 0;
+            int val2 = l2 ? l2->val : 0;
+            // 计算当前位的和，包括进位
+            int sum = val1 + val2 + carry;
+            // 更新进位
+            carry = sum / 10;
+            // 创建新节点，值为当前位的和对10取余
+            curr->next = new ListNode(sum % 10);
+            // 移动当前节点指针
+            curr = curr->next;
+            // 移动两个链表的指针（若不为空）
+            if (l1) l1 = l1->next;
+            if (l2) l2 = l2->next;
+        }
+        // 返回哑节点的下一个节点，即结果链表的头节点
+        ListNode* result = dummy->next;
+        delete dummy;
+        return result;
+    }
+};
